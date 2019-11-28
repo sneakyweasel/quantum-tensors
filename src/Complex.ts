@@ -1,4 +1,4 @@
-import { TAU } from "./Constants";
+import { TAU, CxFormatEnum } from "./Constants";
 import { hslToHex } from "./Helpers";
 
 /**
@@ -140,7 +140,6 @@ export default class Complex {
     return new Complex(this.re, -this.im);
   }
 
-  /* eslint-disable max-len */
   /**
    * Normalize
    * https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-vectors/a/vector-magnitude-normalization
@@ -173,27 +172,30 @@ export default class Complex {
 
   /**
    * Override toString() method
-   * @param complexFormat choice between ["cartesian", "polar", "polarTau"]
+   * @param format choice between ["cartesian", "polar", "polarTau"]
    * @param precision float display precision
    * @returns string with appropriate format
    */
-  toString(complexFormat = "cartesian", precision = 2): string {
-    switch (complexFormat) {
-      case "cartesian":
+  toString(
+    format: CxFormatEnum = CxFormatEnum.cartesian,
+    precision = 2
+  ): string {
+    switch (format) {
+      case CxFormatEnum.cartesian:
         return `(${this.re.toFixed(precision)} ${
           this.im >= 0 ? "+" : ""
         }${this.im.toFixed(precision)}i)`;
-      case "polar":
+      case CxFormatEnum.polar:
         return `${this.r.toFixed(precision)} exp(${this.phi.toFixed(
           precision
         )}i)`;
-      case "polarTau":
+      case CxFormatEnum.polarTau:
         return `${this.r.toFixed(precision)} exp(${this.phiTau.toFixed(
           precision
         )}τi)`;
       default:
         throw new Error(
-          `complexFormat '${complexFormat}' is not in ['cartesian', 'polar', 'polarTau'].`
+          `complexFormat '${format}' is not in ['cartesian', 'polar', 'polarTau'].`
         );
     }
   }
