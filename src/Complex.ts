@@ -68,7 +68,7 @@ export default class Complex {
    * @return z1 === 0
    */
   get isNormal(): boolean {
-    return this.r === 0;
+    return this.r === 1;
   }
 
   /**
