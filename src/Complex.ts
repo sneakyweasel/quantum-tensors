@@ -2,7 +2,7 @@ import { TAU } from "./Constants";
 import { hslToHex } from "./Helpers";
 
 /**
- * Complex number class
+ * COMPLEX NUMBER CLASS
  * https://en.wikipedia.org/wiki/Complex_number
  */
 export default class Complex {
@@ -11,7 +11,6 @@ export default class Complex {
 
   /**
    * Creates a complex number
-   *
    * @param re - The first input number
    * @param im - The second input number
    * @returns Creates a complex number `z = z.re + i z.im`
@@ -22,11 +21,15 @@ export default class Complex {
   }
 
   /**
+   * Absolute value (other names: radius, length, magnitude, modulus)
    * Radius in polar coordinate
    * @returns number
    */
   get r(): number {
-    return this.abs();
+    return this.magnitude();
+  }
+  magnitude(): number {
+    return Math.sqrt(Math.pow(this.re, 2) + Math.pow(this.im, 2));
   }
 
   /**
@@ -34,15 +37,14 @@ export default class Complex {
    * @returns angle
    */
   get phi(): number {
-    return this.arg();
+    return this.argument();
   }
-
-  /**
-   * Phi angle in polar coordinate with TAU
-   * @returns angle divided by TAU
-   */
-  get phiTau(): number {
-    return this.arg() / TAU;
+  argument(): number {
+    let arg = Math.atan2(this.im, this.re);
+    if (arg < 0) {
+      arg += TAU;
+    }
+    return arg;
   }
 
   /**
@@ -51,26 +53,6 @@ export default class Complex {
    */
   abs2(): number {
     return Math.pow(this.re, 2) + Math.pow(this.im, 2);
-  }
-
-  /**
-   * Absolute value (length)
-   * @returns absolute value
-   */
-  abs(): number {
-    return Math.sqrt(Math.pow(this.re, 2) + Math.pow(this.im, 2));
-  }
-
-  /**
-   * Complex number argument in range [0,Tau]
-   * @returns number
-   */
-  arg(): number {
-    let arg = Math.atan2(this.im, this.re);
-    if (arg < 0) {
-      arg += TAU;
-    }
-    return arg;
   }
 
   /**
@@ -97,11 +79,6 @@ export default class Complex {
   equal(z2: Complex): boolean {
     return this.re === z2.re && this.im === z2.im;
   }
-
-  /**
-   * UNARY OPERATIONS
-   * Operations with arity 1 who return a complex number
-   */
 
   /**
    * Normalize
@@ -131,11 +108,6 @@ export default class Complex {
   conj(): Complex {
     return new Complex(this.re, -this.im);
   }
-
-  /**
-   * BINARY OPERATIONS
-   * Operations with arity 2+ that return a complex number
-   */
 
   /**
    * Addition
@@ -205,7 +177,7 @@ export default class Complex {
           precision
         )}i)`;
       case "polarTau":
-        return `${this.r.toFixed(precision)} exp(${this.phiTau.toFixed(
+        return `${this.r.toFixed(precision)} exp(${(this.phi / TAU).toFixed(
           precision
         )}τi)`;
       default:
@@ -217,13 +189,12 @@ export default class Complex {
 
   /**
    * Generate HSL color from complex number
+   * See complex domain coloring
    * @returns RGB string
    */
   toColor(): string {
-    const angleInDegrees =
-      ((Math.atan2(this.im, this.re) * 360) / TAU + 360) % 360;
-    const r = Math.sqrt(this.re * this.re + this.im * this.im); // for pure color it should be always 1
-    return hslToHex(angleInDegrees, 100, 100 - 50 * r);
+    const angle = ((this.phi * 360) / TAU + 360) % 360;
+    return hslToHex(angle, 100, 100 - 50 * this.r);
   }
 
   /**
