@@ -74,6 +74,70 @@ export default class Complex {
   }
 
   /**
+   * Check if a complex number is zero
+   * @return z1 === 0
+   */
+  isZero(): boolean {
+    return this.re === 0 && this.im === 0;
+  }
+
+  /**
+   * Check if a complex number is normalized
+   * @return z1 === 0
+   */
+  isNormal(): boolean {
+    return this.r === 0;
+  }
+
+  /**
+   * Tests if a complex is equal to another
+   * @param z2 complex to test equality
+   * @returns z1 === z2
+   */
+  equal(z2: Complex): boolean {
+    return this.re === z2.re && this.im === z2.im;
+  }
+
+  /**
+   * UNARY OPERATIONS
+   * Operations with arity 1 who return a complex number
+   */
+
+  /**
+   * Normalize
+   * https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-vectors/a/vector-magnitude-normalization
+   * @returns z
+   */
+  normalize(): Complex {
+    if (this.r !== 0) {
+      return new Complex(this.re / this.r, this.im / this.r);
+    } else {
+      throw new Error("Cannot normalize a 0 length vector...");
+    }
+  }
+
+  /**
+   * Complex negation, negate the real part of the complex number
+   * @returns z = z{-re, im}
+   */
+  negate(): Complex {
+    return new Complex(-this.re, this.im);
+  }
+
+  /**
+   * Complex conjugation
+   * @returns z = z{re, -im}
+   */
+  conj(): Complex {
+    return new Complex(this.re, -this.im);
+  }
+
+  /**
+   * BINARY OPERATIONS
+   * Operations with arity 2+ that return a complex number
+   */
+
+  /**
    * Addition
    * @param z2 complex number to be added
    * @returns z = z1 + z2
@@ -125,52 +189,6 @@ export default class Complex {
   }
 
   /**
-   * Complex negation, negate the real part of the complex number
-   * @returns z = z{-re, im}
-   */
-  negate(): Complex {
-    return new Complex(-this.re, this.im);
-  }
-
-  /**
-   * Complex conjugation
-   * @returns z = z{re, -im}
-   */
-  conj(): Complex {
-    return new Complex(this.re, -this.im);
-  }
-
-  /**
-   * Normalize
-   * https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-vectors/a/vector-magnitude-normalization
-   * @returns z
-   */
-  normalize(): Complex {
-    if (this.r !== 0) {
-      return new Complex(this.re / this.r, this.im / this.r);
-    } else {
-      throw new Error("Cannot normalize a 0 length vector...");
-    }
-  }
-
-  /**
-   * Tests if a complex is equal to another
-   * @param z2 complex to test equality
-   * @returns z1 === z2
-   */
-  equal(z2: Complex): boolean {
-    return this.re === z2.re && this.im === z2.im;
-  }
-
-  /**
-   * Check if a complex number is zero
-   * @return z1 === 0
-   */
-  isZero(): boolean {
-    return this.re === 0 && this.im === 0;
-  }
-
-  /**
    * Override toString() method
    * @param format choice between ["cartesian", "polar", "polarTau"]
    * @param precision float display precision
@@ -218,6 +236,56 @@ export default class Complex {
    */
   static fromPolar(r: number, phi: number): Complex {
     return new Complex(r * Math.cos(phi), r * Math.sin(phi));
+  }
+
+  /**
+   * Static method for addition
+   * @param z1
+   * @param z2
+   * @returns z = z1 + z2
+   */
+  static add(z1: Complex, z2: Complex): Complex {
+    return z1.add(z2);
+  }
+
+  /**
+   * Static method for substraction
+   * @param z1
+   * @param z2
+   * @returns z = z1 - z2
+   */
+  static sub(z1: Complex, z2: Complex): Complex {
+    return z1.sub(z2);
+  }
+
+  /**
+   * Static method for multiplication
+   * @param z1
+   * @param z2
+   * @returns z = z1 * z2
+   */
+  static mul(z1: Complex, z2: Complex): Complex {
+    return z1.mul(z2);
+  }
+
+  /**
+   * Static method for multiplication
+   * @param z1
+   * @param z2
+   * @returns z = z1 * z2
+   */
+  static div(z1: Complex, z2: Complex): Complex {
+    return z1.div(z2);
+  }
+
+  /**
+   * Static method for testing equality
+   * @param z1
+   * @param z2
+   * @returns z1 === z2
+   */
+  static equal(z1: Complex, z2: Complex): boolean {
+    return z1.equal(z2);
   }
 }
 
