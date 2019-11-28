@@ -1,4 +1,4 @@
-import { TAU, CxFormatEnum } from "./Constants";
+import { TAU } from "./Constants";
 import { hslToHex } from "./Helpers";
 
 /**
@@ -14,7 +14,7 @@ export default class Complex {
    *
    * @param re - The first input number
    * @param im - The second input number
-   * @returns Creates a complex number `z = z.re + i z.im `
+   * @returns Creates a complex number `z = z.re + i z.im`
    */
   constructor(re: number, im = 0) {
     this.re = re;
@@ -194,20 +194,17 @@ export default class Complex {
    * @param precision float display precision
    * @returns string with appropriate format
    */
-  toString(
-    format: CxFormatEnum = CxFormatEnum.cartesian,
-    precision = 2
-  ): string {
+  toString(format: string = "cartesian", precision = 2): string {
     switch (format) {
-      case CxFormatEnum.cartesian:
+      case "cartesian":
         return `(${this.re.toFixed(precision)} ${
           this.im >= 0 ? "+" : ""
         }${this.im.toFixed(precision)}i)`;
-      case CxFormatEnum.polar:
+      case "polar":
         return `${this.r.toFixed(precision)} exp(${this.phi.toFixed(
           precision
         )}i)`;
-      case CxFormatEnum.polarTau:
+      case "polarTau":
         return `${this.r.toFixed(precision)} exp(${this.phiTau.toFixed(
           precision
         )}τi)`;
