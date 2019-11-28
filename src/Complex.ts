@@ -26,9 +26,9 @@ export default class Complex {
    * @returns number
    */
   get r(): number {
-    return this.magnitude();
+    return this.magnitude;
   }
-  magnitude(): number {
+  get magnitude(): number {
     return Math.sqrt(Math.pow(this.re, 2) + Math.pow(this.im, 2));
   }
 
@@ -37,9 +37,9 @@ export default class Complex {
    * @returns angle
    */
   get phi(): number {
-    return this.argument();
+    return this.argument;
   }
-  argument(): number {
+  get argument(): number {
     let arg = Math.atan2(this.im, this.re);
     if (arg < 0) {
       arg += TAU;
@@ -51,7 +51,7 @@ export default class Complex {
    * Length squared: intensity probability
    * @returns number
    */
-  abs2(): number {
+  get abs2(): number {
     return Math.pow(this.re, 2) + Math.pow(this.im, 2);
   }
 
@@ -59,7 +59,7 @@ export default class Complex {
    * Check if a complex number is zero
    * @return z1 === 0
    */
-  isZero(): boolean {
+  get isZero(): boolean {
     return this.re === 0 && this.im === 0;
   }
 
@@ -67,7 +67,7 @@ export default class Complex {
    * Check if a complex number is normalized
    * @return z1 === 0
    */
-  isNormal(): boolean {
+  get isNormal(): boolean {
     return this.r === 0;
   }
 
