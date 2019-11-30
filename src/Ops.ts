@@ -62,7 +62,8 @@ export function phaseShiftForRealEigenvectors(
 
 /**
  * Reflection from an optically lighter material.
- * Note that change horrizontal frame of reference.
+ * Note that change horizontal frame of reference.
+ * FIXME: Both reflect from lighter and denser are the same
  */
 export function reflectPhaseFromLighter(): Operator {
   const array = [
@@ -74,7 +75,8 @@ export function reflectPhaseFromLighter(): Operator {
 
 /**
  * Reflection from an optically denser material.
- * Note that change horrizontal frame of reference.
+ * Note that change horizontal frame of reference.
+ * FIXME: Both reflect from lighter and denser are the same
  */
 export function reflectPhaseFromDenser(): Operator {
   const array = [
@@ -86,7 +88,7 @@ export function reflectPhaseFromDenser(): Operator {
 
 /**
  * An omnidirectional operator multiplying by a complex number.
- * @param r Absolute value of amplitide multipier. E.g. Math.SQRT1_2 for
+ * @param r Absolute value of amplitide multiplier. E.g. Math.SQRT1_2 for
  * @param rot Phase multiplier, in TAU (from range: [0,1]).
  */
 export function amplitudeIntensity(r: number, rot: number): Operator {
@@ -137,11 +139,11 @@ export function reflectFromPlaneDirection(angle: number): Operator {
 }
 
 /**
- * An auxiliary operation for beam splitter transmittion directions.
+ * An auxiliary operation for beam splitter transmission directions.
  * @param angle Angle in degrees [0, 45, 90, 135] up to 180. --> and CCW.
  * @returns Operator with dimensions [Dimension.direction()].
  */
-export function beamsplitterTransmittionDirections(angle: number): Operator {
+export function beamsplitterTransmissionDirections(angle: number): Operator {
   switch (mod(angle, 180)) {
     case 0: // -
       return Operator.fromSparseCoordNames(
@@ -187,5 +189,4 @@ export function diodeForDirections(angle: number): Operator {
   }
 }
 
-// TODO:
-// Add in elements "projection on"
+// TODO: Add in elements "projection on"

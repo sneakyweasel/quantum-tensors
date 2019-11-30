@@ -11,7 +11,7 @@ export default class OperatorEntry {
   value: Complex
 
   /**
-   * Creates a VectorEntry from output and input coordinates, and value.
+   * Creates a OperatorEntry from output and input coordinates, and value.
    * @param coordOut
    * @param coordIn
    * @param value
@@ -24,7 +24,7 @@ export default class OperatorEntry {
 
   /**
    * Tensor product of two entires (multiplies values, concatenates coordinates).
-   * @param e2  The other entry
+   * @param e2 The other entry
    */
   outer(e2: OperatorEntry): OperatorEntry {
     const e1 = this

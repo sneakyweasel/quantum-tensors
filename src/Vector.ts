@@ -26,15 +26,6 @@ export default class Vector {
   }
 
   /**
-   * @deprecated
-   * A getter to for entries.
-   * Use this.entires instead; here only to make sure it is not a breaking change.
-   */
-  get cells(): VectorEntry[] {
-    return this.entries
-  }
-
-  /**
    * @returns Sizes of dimensions.
    * @see {@link Dimension}
    */
@@ -77,13 +68,12 @@ export default class Vector {
   /**
    * Adds to vectors.
    * @param v2 The other vector.
-   *
    * @returns v1 + v2
-   *
    */
   add(v2: Vector): Vector {
     const v1 = this
 
+    // FIXME: Code smell
     Dimension.checkDimensions(v1.dimensions, v2.dimensions)
 
     const entries = _.chain(v1.entries.concat(v2.entries))
@@ -105,7 +95,7 @@ export default class Vector {
    * @returns v1 - v2
    */
   sub(v2: Vector): Vector {
-    return this.add(v2.mulConstant(Cx(-1)))
+    return this.add(v2.scale(Cx(-1)))
   }
 
   /**
@@ -113,7 +103,7 @@ export default class Vector {
    * @param c A complex number.
    * @returns c v
    */
-  mulConstant(c: Complex): Vector {
+  scale(c: Complex): Vector {
     const entries = this.entries.map(entry => new VectorEntry(entry.coord, entry.value.mul(c)))
     return new Vector(entries, this.dimensions)
   }
@@ -183,7 +173,7 @@ export default class Vector {
     if (norm === 0) {
       throw new Error('Cannot normalize a zero-length vector!')
     }
-    return this.mulConstant(Cx(norm))
+    return this.scale(Cx(norm))
   }
 
   /**

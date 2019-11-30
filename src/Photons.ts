@@ -4,6 +4,8 @@ import Operator from './Operator'
 import Dimension from './Dimension'
 import { Cx } from './Complex'
 import { Complex } from '../main'
+import { ParticleInterface, ProbabilityInterface, MeasureInterface } from './interfaces'
+import VectorEntry from './VectorEntry'
 
 /**
  * Photons class.
@@ -11,7 +13,7 @@ import { Complex } from '../main'
  * x, y, direction, polarization
  * @see {@link @Dimension.position}, {@link @Dimension.direction}, {@link @Dimension.polarization}
  * Designed so that it will work with https://github.com/stared/quantum-game-2 board.
- * @todo Think deeply about which things should change in-plance, and which: modify this object.
+ * @todo Think deeply about which things should change in-place, and which: modify this object.
  * @todo A lot of things with interfaces to make them consistent.
  */
 export default class Photons {
@@ -95,7 +97,6 @@ export default class Photons {
    * @param posY Position of the photon, y.
    * @param dirDirection Direction from ['>', '^', '<', 'v].
    * @param pol Polarization from ['H', 'V'].
-   *
    * @returns A vector [dimX, DimY, dir, pol], does not modify the object.
    */
   createPhoton(posX: number, posY: number, dir: string, pol: string): Vector {
@@ -107,14 +108,10 @@ export default class Photons {
 
   /**
    * Add one more photon to the state, using {@link createPhoton}.
-   *
-   * @remark
-   *
    * @param posX Position of the photon, x.
    * @param posY Position of the photon, y.
    * @param dir Direction from ['>', '^', '<', 'v].
    * @param pol Polarization from ['H', 'V'].
-   *
    * @returns Nothings, acts in-place.
    */
   addPhotonIndicator(posX: number, posY: number, dir: string, pol: string): void {
@@ -137,7 +134,6 @@ export default class Photons {
   /**
    * Create a propagator, given this object dimX and dimY.
    * @param yDirMeansDown For true, direction 'v' increments dimY.
-   *
    * @return An operator, with dimensions [dimX, dimY, {@link Dimension.direction()}].
    */
   createPhotonPropagator(yDirMeansDown = true): Operator {
@@ -157,7 +153,6 @@ export default class Photons {
   /**
    * Propagate all particles, using {@link createPhotonPropagator}.
    * @param yDirMeansDown or true, direction 'v' increments dimY.
-   *
    * @returns Nothing, acts in-place.
    */
   propagatePhotons(yDirMeansDown = true): void {
@@ -172,7 +167,6 @@ export default class Photons {
    * @param op Operator, assumed to be with dimensions [pol, dir].
    * @param posX Position x.
    * @param posY Posiiton y.
-   *
    * @returns An operator [dimX, dimY, pol, dir].
    */
   createLocalizedOperator(op: Operator, posX: number, posY: number): Operator {
@@ -184,7 +178,6 @@ export default class Photons {
    * @param posX Position x.
    * @param posY Position y.
    * @param op Operator, assumed to be with dimensions [pol, dir].
-   *
    * @returns Probability lost at tile (x, y) after applying the operator.
    * Does not change the photon object.
    */
@@ -198,19 +191,17 @@ export default class Photons {
 
   /**
    * Demo of measurement of one particle
-   * So far the basis is FIXED, so it won't give corrent results with operators absorbing in a basis
+   * So far the basis is FIXED, so it won't give correct results with operators absorbing in a basis
    * that does not commute with this basis.
    * Vide {@link measureAbsorptionAtOperator} as the structure is
    * @param posX
    * @param posY
    * @param op
    * @param photonId
-   *
-   * @return Only measurement (zeros excluded). Conditional state is NOT normalized (to avoid issues with division by )
+   * @return Only measurement (zeros excluded). Conditional state is NOT normalized (to avoid issues with division by 0)
    */
-  vectorValuedMeasurement(posX: number, posY: number, op: Operator, photonId = 0): any {
-    // as I see later, localizedOperator can be discarded as
-    // we use localizedId anyway
+  vectorValuedMeasurement(posX: number, posY: number, op: Operator, photonId = 0): MeasureInterface[] {
+    // as I see later, localizedOperator can be discarded as we use localizedId anyway
     const localizedOperator = this.createLocalizedOperator(op, posX, posY)
     // for decomposition of identity
     // this step is dirty, as it won't work, say, for polarizer at non H/V angle
@@ -255,20 +246,19 @@ export default class Photons {
           polStr: coordStr[1],
           inputProb: inputProjectedProbabability,
           probability: p,
-          projectedState: newPhotons.ketString(), // for now just print  // not normalized
+          projectedState: newPhotons.ketString(), // for now just print, not normalized
         }
       })
       .filter(d => d.inputProb > 0)
   }
 
   /**
-   * Turn an list of operators in a complete one-photon iteraction operator for the board.
+   * Turn an list of operators in a complete one-photon interaction operator for the board.
    * @remark Some space for improvement with avoiding identity (direct sum structure),
    * vide {@link Operator.mulVecPartial}.
    * @param opsWithPos A list of [x, y, operator with [dir, pol]].
    */
   createSinglePhotonInteraction(opsWithPos: [number, number, Operator][]): Operator {
-    //
     const localizedOpsShifted = opsWithPos.map((x: [number, number, Operator]) => {
       const [posX, posY, op] = x
       const shiftedOp = op.sub(Operator.identity([Dimension.direction(), Dimension.polarization()]))
@@ -286,7 +276,6 @@ export default class Photons {
    * @remark Absorption for states with n>1 photons is broken.
    * - it tracks only a fixed-number of photons subspace.
    * @param opsWithPos A list of [x, y, operator with [dir, pol]].
-   *
    * @returns Nothing, as acts in-place.
    */
   actOnSinglePhotons(opsWithPos: [number, number, Operator][]): void {
@@ -302,30 +291,21 @@ export default class Photons {
    * @returns
    * Angles 0-360, starting from --> and moving counterclockwise
    * |psi> = (are + i aim) |H> + (bre + i bim) |V>
-   *
    * @todo Interface is clunky and restrictred to 1 particle.
    */
-  aggregatePolarization(): {
-    x: number
-    y: number
-    direction: number
-    are: number
-    aim: number
-    bre: number
-    bim: number
-  }[] {
+  aggregatePolarization(): ParticleInterface[] {
     if (this.nPhotons !== 1) {
       throw `Right now implemented only for 1 photon. Here we have ${this.nPhotons} photons.`
     }
     const aggregated = _.chain(this.vector.entries)
-      .groupBy((entry: any) => _.at(entry.coord, [0, 1, 2]))
+      .groupBy((entry: VectorEntry) => _.at(entry.coord, [0, 1, 2]))
       .values()
-      .map((entries: any) => {
+      .map((entries: VectorEntry[]) => {
         const first = entries[0]
         /* eslint-disable @typescript-eslint/no-unused-vars */
         const [x, y, dir, _pol] = first.coord
         const amplitudes: [Complex, Complex] = [Cx(0), Cx(0)]
-        entries.forEach((entry: any) => {
+        entries.forEach((entry: VectorEntry) => {
           amplitudes[entry.coord[3]] = entry.value
         })
         return {
@@ -347,19 +327,23 @@ export default class Photons {
    * Shows probability of photons.
    * @todo Create probability for any number of photons.
    */
-  totalIntensityPerTile(): { x: number; y: number; probability: number }[] {
+  totalIntensityPerTile(): ProbabilityInterface[] {
     if (this.nPhotons !== 1) {
       throw `Right now implemented only for 1 photon. Here we have ${this.nPhotons} photons.`
     }
 
     const aggregated = _.chain(this.vector.entries)
-      .groupBy((entry: any) => _.at(entry.coord, [0, 1]))
+      .groupBy((entry: VectorEntry) => _.at(entry.coord, [0, 1]))
       .values()
-      .map((entries: any) => {
+      .map((entries: VectorEntry[]) => {
         const first = entries[0]
         /* eslint-disable @typescript-eslint/no-unused-vars */
         const [x, y, _dir, _pol] = first.coord
-        const probability = entries.map((entry: any) => entry.value.abs2()).reduce((a: number, b: number) => a + b)
+        const probability = entries
+          .map((entry: VectorEntry) => {
+            return entry.value.abs2
+          })
+          .reduce((a: number, b: number) => a + b)
 
         return { x, y, probability }
       })
@@ -373,7 +357,6 @@ export default class Photons {
    * See {@link Vector.toString} for formatting options.
    * @param complexFormat ['cartesian', 'polar', 'polarTau'].
    * @param precision Float precision.
-   *
    * @returns A ket string, e.g. (0.71 +0.00i) |3,1,>,V⟩ + (0.00 +0.71i) |2,2,v,V⟩.
    */
   ketString(complexFormat = 'cartesian', precision = 2): string {
