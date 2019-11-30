@@ -36,6 +36,7 @@ export function hslToHex(hParam: number, sParam: number, lParam: number): string
     g = l
     b = l // achromatic
   } else {
+    // eslint-disable-next-line
     const hue2rgb = (pParam: number, qParam: number, tParam: number) => {
       const p = pParam
       const q = qParam
@@ -53,6 +54,7 @@ export function hslToHex(hParam: number, sParam: number, lParam: number): string
     g = hue2rgb(p, q, h)
     b = hue2rgb(p, q, h - 1 / 3)
   }
+  // eslint-disable-next-line
   const toHex = (x: number) => {
     const hex = Math.round(x * 255).toString(16)
     return hex.length === 1 ? `0${hex}` : hex
