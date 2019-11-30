@@ -125,7 +125,7 @@ export default class Photons {
         throw `Adding photons not yet implemented for non-ortogonal states.` +
           `Old photon:\n${this.vector}\nand new photon:\n${newPhoton}`
       }
-      this.vector = Vector.add([oldPhotons.outer(newPhoton), newPhoton.outer(oldPhotons)]).mulConstant(Cx(Math.SQRT1_2))
+      this.vector = Vector.add([oldPhotons.outer(newPhoton), newPhoton.outer(oldPhotons)]).scale(Cx(Math.SQRT1_2))
     } else {
       throw `Adding 3 or more particles not yet implemented`
     }

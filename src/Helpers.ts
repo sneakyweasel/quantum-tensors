@@ -1,4 +1,13 @@
 /**
+ * Avoids the javascript negative modulo problems
+ * @param x number
+ * @param n modulo
+ */
+export function mod(x: number, n: number): number {
+  return ((x % n) + n) % n
+}
+
+/**
  * Turns an index into a multiindex, according to dimension sizes
  * @param index An integer
  * @param sizes Sizes of each dimension

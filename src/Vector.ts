@@ -118,6 +118,7 @@ export default class Vector {
   dot(v2: Vector): Complex {
     const v1 = this
 
+    // FIXME: Code smell
     Dimension.checkDimensions(v1.dimensions, v2.dimensions)
 
     const result = _.chain(v1.entries.concat(v2.entries))
@@ -136,10 +137,6 @@ export default class Vector {
     return result
   }
 
-  // dotPartial(coordIndices: number[], v: Vector): Vector {
-  // TO DO
-  // }
-
   /**
    * Inner product, the classic ⟨bra|ket⟩ for complex vectors.
    * https://en.wikipedia.org/wiki/Bra%E2%80%93ket_notation
@@ -154,10 +151,8 @@ export default class Vector {
   /**
    * Vector norm (vector length) squared.
    * In quantum physics, it is probability of a quantum state.
-   *
    * @note Would be equivalent to inner product with itself,
    * but we use a more straightforward implementation (plus, to make sure we get a real number).
-   *
    * @returns ⟨v|v⟩
    */
   normSquared(): number {
@@ -182,7 +177,6 @@ export default class Vector {
    * https://en.wikipedia.org/wiki/Kronecker_product
    * @param v2 Another operator.
    * @returns v = v1 ⊗ v2
-   *
    * @todo Consider using flatMap for clarity.
    */
   outer(v2: Vector): Vector {
@@ -219,9 +213,7 @@ export default class Vector {
    * @param precision Float display precision.
    * @param separator Entry separator.
    * @param intro If to show dimensions and sized.
-   *
    * @returns A string, e.g.:
-   *
    * Vector with 3 entries of max size [2,2] with dimensions [spin,polarization]
    * (0.00 +2.00i) |u,H⟩ + (-1.00 -1.00i) |d,H⟩ + (0.50 +2.50i) |d,V⟩
    */
@@ -253,10 +245,8 @@ export default class Vector {
   /**
    * Creates a a vector from a dense array of complex numbers.
    * It needs dimensions to create the complex structure.
-   *
    * @example
    * const vec = Vector.fromArray([Cx(1), Cx(0), Cx(2, 1), Cx(0, -1)], [Dimension.spin(), Dimension.spin()])
-   *
    * @param denseArray A 1-d array of complex numbers.
    * @param dimensions Dimensions.
    * @param removeZeros If to remove zero value.
@@ -280,10 +270,8 @@ export default class Vector {
 
   /**
    * Creates a vector with a single 1 value and all zeros, e.g. |H,u⟩.
-   *
    * @example
    * Vector.indicator([Dimensions.polarization(), Dimensions.spin()], 'Hu')
-   *
    * @param dimensions
    * @param coordNames Symbols for each ordinate.
    * For symbols with more than one letter you need to use an array of strings.
@@ -295,18 +283,14 @@ export default class Vector {
   }
 
   /**
-   *
    * @example
-   *
    * const singletState = Vector.fromSparseCoordNames([
    *   ['ud', Cx(1)],
    *   ['du', Cx(-1)],
    * ], [Dimension.spin(), Dimension.spin()])
-   *
    * @param stringedEntries A list of entries, using symbols.
    * ['Hu', C(0.5, -1)] ->  (0.50 - 1.00i) |H,u⟩
    * @param dimensions
-   *
    * @returns A vector, as desired.
    */
   static fromSparseCoordNames(stringedEntries: [string, Complex][], dimensions: Dimension[]): Vector {
@@ -318,13 +302,9 @@ export default class Vector {
 
   /**
    * Outer product (vectors product) between two or more vectors.
-   *
    * @see {@link Vector.outer} for the actual implementation.
-   *
    * @param ops [v1, v2, ...]
-   *
    * @returns ⨂[v1, v2, ...]
-   *
    * @todo Can be optimized if needed.
    */
   static outer(vectors: Vector[]): Vector {
@@ -334,11 +314,8 @@ export default class Vector {
   /**
    * As sum of many vectors with compatible dimensions.
    * @see {@link Vector.add} for the actual implementation.
-   *
    * @param ops [v1, v2, ...]
-   *
    * @returns v1 + v2 + ...
-   *
    * @todo Can be optimized if needed.
    */
   static add(vectors: Vector[]): Vector {

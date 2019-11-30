@@ -19,6 +19,8 @@ import Operator from './Operator'
 // - measurement
 // - some formula view
 
+// TODO: measumementOneOfTwo(alpha: number, particle: number)
+
 const dimPol = Dimension.polarization()
 
 export const singletState = Vector.fromSparseCoordNames(
@@ -96,5 +98,3 @@ angles.forEach(alpha => {
   const [res, opRes] = measurementOne(alpha, ourState)
   console.log(`At ${alpha} the result was: ${perc(res)} vs ${perc(opRes)}`)
 })
-
-// TO DO measumementOneOfTwo(alpha: number, particle: number)

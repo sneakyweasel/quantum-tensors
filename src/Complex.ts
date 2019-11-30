@@ -76,7 +76,7 @@ export default class Complex {
    * @param z2 complex to test equality
    * @returns z1 === z2
    */
-  equal(z2: Complex): boolean {
+  equals(z2: Complex): boolean {
     return this.re === z2.re && this.im === z2.im
   }
 
@@ -241,8 +241,8 @@ export default class Complex {
    * @param z2
    * @returns z1 === z2
    */
-  static equal(z1: Complex, z2: Complex): boolean {
-    return z1.equal(z2)
+  static equals(z1: Complex, z2: Complex): boolean {
+    return z1.equals(z2)
   }
 }
 

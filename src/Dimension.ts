@@ -13,8 +13,8 @@ export default class Dimension {
 
   /**
    * Creates a dimentions - to be used in a Vector or Operator object
-   * @param name Name of a dimension (e.g. "quibt", "spin", "x", etc)
-   * @param size Size of a dimension
+   * @param name Name of dimension (e.g. "qbit", "spin", "x", etc)
+   * @param size Size of dimension
    * @param coordNames Name of each coordinate
    */
   constructor(name: string, size: number, coordNames: string[]) {
@@ -24,6 +24,45 @@ export default class Dimension {
     this.name = name
     this.coordNames = coordNames // later, we may make it optional
     this.size = size
+  }
+
+  /**
+   * @returns string with concat names
+   */
+  get coordString(): string {
+    return this.coordNames.join('')
+  }
+
+  /**
+   * Test equality between two dimensions
+   * @param dim2
+   * @returns dim1 === dim 2
+   */
+  isEqual(dim2: Dimension): boolean {
+    const dim1 = this
+    return _.isEqual(dim1, dim2)
+  }
+
+  /**
+   * Retrieves a coordinates index from the coordinates list
+   * @param coordName one coord bame
+   * @returns error or the coord index
+   */
+  coordNameToIndex(coordName: string): number {
+    const idx = this.coordNames.indexOf(coordName)
+    if (idx < 0) {
+      throw new Error(`${coordName} is not in [${this.coordNames}]`)
+    } else {
+      return idx
+    }
+  }
+
+  /**
+   * Overrides toString() method
+   * @returns formatted string
+   */
+  toString(): string {
+    return `#Dimension [${this.name}] of size [${this.size.toString()}] has coordinates named: [${this.coordNames}]`
   }
 
   /**
@@ -58,45 +97,6 @@ export default class Dimension {
   static position(size: number, name = 'x'): Dimension {
     const coordNames = _.range(size).map((i: number) => i.toString())
     return new Dimension(name, size, coordNames)
-  }
-
-  /**
-   * Overrides toString() method
-   * @returns formatted string
-   */
-  toString(): string {
-    return `#Dimension [${this.name}] of size [${this.size.toString()}] has coordinates named: [${this.coordNames}]`
-  }
-
-  /**
-   * @returns string with concat names
-   */
-  get coordString(): string {
-    return this.coordNames.join('')
-  }
-
-  /**
-   * Test equality between two dimensions
-   * @param dim2
-   * @returns dim1 === dim 2
-   */
-  isEqual(dim2: Dimension): boolean {
-    const dim1 = this
-    return dim1.name === dim2.name && dim1.size === dim2.size && _.isEqual(dim1.coordNames, dim2.coordNames)
-  }
-
-  /**
-   * Retrieves a coordinates index from the coordinates list
-   * @param coordName one coord bame
-   * @returns error or the coord index
-   */
-  coordNameToIndex(coordName: string): number {
-    const idx = this.coordNames.indexOf(coordName)
-    if (idx < 0) {
-      throw new Error(`${coordName} is not in [${this.coordNames}]`)
-    } else {
-      return idx
-    }
   }
 
   /**
@@ -141,10 +141,8 @@ export default class Dimension {
   }
 
   /**
-   *
    * @param s string, such as "udH" or ['u', 'd', 'H']
    * @param dimensions  Dimensions to be used
-   *
    * @returns
    */
   static stringToCoordIndices(s: string | string[], dimensions: Dimension[]): number[] {
