@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import * as _ from 'lodash'
 
 /**
  * Dimension class, e.g.
@@ -7,9 +7,9 @@ import * as _ from "lodash";
  * Vide: http://nlp.seas.harvard.edu/NamedTensor and http://nlp.seas.harvard.edu/NamedTensor2
  */
 export default class Dimension {
-  name: string;
-  size: number;
-  coordNames: string[];
+  name: string
+  size: number
+  coordNames: string[]
 
   /**
    * Creates a dimentions - to be used in a Vector or Operator object
@@ -19,13 +19,11 @@ export default class Dimension {
    */
   constructor(name: string, size: number, coordNames: string[]) {
     if (size !== coordNames.length) {
-      throw new Error(
-        `Coordinates [${coordNames}] array is of length ${coordNames.length}, not ${size}.`
-      );
+      throw new Error(`Coordinates [${coordNames}] array is of length ${coordNames.length}, not ${size}.`)
     }
-    this.name = name;
-    this.coordNames = coordNames; // later, we may make it optional
-    this.size = size;
+    this.name = name
+    this.coordNames = coordNames // later, we may make it optional
+    this.size = size
   }
 
   /**
@@ -33,7 +31,7 @@ export default class Dimension {
    * @returns polarization dimension
    */
   static polarization(): Dimension {
-    return new Dimension("polarization", 2, ["H", "V"]);
+    return new Dimension('polarization', 2, ['H', 'V'])
   }
 
   /**
@@ -41,7 +39,7 @@ export default class Dimension {
    * @returns direction dimensions
    */
   static direction(): Dimension {
-    return new Dimension("direction", 4, [">", "^", "<", "v"]);
+    return new Dimension('direction', 4, ['>', '^', '<', 'v'])
   }
 
   /**
@@ -49,7 +47,7 @@ export default class Dimension {
    * @returns spin dimensions
    */
   static spin(): Dimension {
-    return new Dimension("spin", 2, ["u", "d"]);
+    return new Dimension('spin', 2, ['u', 'd'])
   }
 
   /**
@@ -57,9 +55,9 @@ export default class Dimension {
    * @param size A positive integer - size of steps.
    * @param name Dimension name, e.g. 'x', 'y' or 'z'.
    */
-  static position(size: number, name = "x"): Dimension {
-    const coordNames = _.range(size).map((i: number) => i.toString());
-    return new Dimension(name, size, coordNames);
+  static position(size: number, name = 'x'): Dimension {
+    const coordNames = _.range(size).map((i: number) => i.toString())
+    return new Dimension(name, size, coordNames)
   }
 
   /**
@@ -67,18 +65,14 @@ export default class Dimension {
    * @returns formatted string
    */
   toString(): string {
-    return `#Dimension [${
-      this.name
-    }] of size [${this.size.toString()}] has coordinates named: [${
-      this.coordNames
-    }]`;
+    return `#Dimension [${this.name}] of size [${this.size.toString()}] has coordinates named: [${this.coordNames}]`
   }
 
   /**
    * @returns string with concat names
    */
   get coordString(): string {
-    return this.coordNames.join("");
+    return this.coordNames.join('')
   }
 
   /**
@@ -87,12 +81,8 @@ export default class Dimension {
    * @returns dim1 === dim 2
    */
   isEqual(dim2: Dimension): boolean {
-    const dim1 = this;
-    return (
-      dim1.name === dim2.name &&
-      dim1.size === dim2.size &&
-      _.isEqual(dim1.coordNames, dim2.coordNames)
-    );
+    const dim1 = this
+    return dim1.name === dim2.name && dim1.size === dim2.size && _.isEqual(dim1.coordNames, dim2.coordNames)
   }
 
   /**
@@ -101,11 +91,11 @@ export default class Dimension {
    * @returns error or the coord index
    */
   coordNameToIndex(coordName: string): number {
-    const idx = this.coordNames.indexOf(coordName);
+    const idx = this.coordNames.indexOf(coordName)
     if (idx < 0) {
-      throw new Error(`${coordName} is not in [${this.coordNames}]`);
+      throw new Error(`${coordName} is not in [${this.coordNames}]`)
     } else {
-      return idx;
+      return idx
     }
   }
 
@@ -114,11 +104,11 @@ export default class Dimension {
    * @param dims Array of dimensions
    */
   static concatDimNames(dims: Dimension[]): string {
-    let names = "";
+    let names = ''
     dims.forEach(dim => {
-      names += dim.coordString;
-    });
-    return names;
+      names += dim.coordString
+    })
+    return names
   }
 
   /**
@@ -131,27 +121,23 @@ export default class Dimension {
     // Check for size
     if (dims1.length !== dims2.length) {
       console.error(
-        `Dimensions with unequal number of components ${dims1.length} !== ${
-          dims2.length
-        }.\n
-        Dimensions 1:\n${dims1.join("\n")}\n
-        Dimensions 2:\n${dims2.join("\n")}`
-      );
-      throw new Error("Dimensions array size mismatch...");
+        `Dimensions with unequal number of components ${dims1.length} !== ${dims2.length}.\n
+        Dimensions 1:\n${dims1.join('\n')}\n
+        Dimensions 2:\n${dims2.join('\n')}`,
+      )
+      throw new Error('Dimensions array size mismatch...')
     }
     // Check for order
     _.range(dims1.length).forEach((i: number) => {
       if (!dims1[i].isEqual(dims2[i])) {
         console.error(
-          `Dimensions have the same number of components, but the component ${i} is\n${
-            dims1[i]
-          }\nvs\n${dims2[i]}.\n
-          Dimensions 1:\n${dims1.join("\n")}\n
-          Dimensions 2:\n${dims2.join("\n")}`
-        );
-        throw new Error("Dimensions array order mismatch...");
+          `Dimensions have the same number of components, but the component ${i} is\n${dims1[i]}\nvs\n${dims2[i]}.\n
+          Dimensions 1:\n${dims1.join('\n')}\n
+          Dimensions 2:\n${dims2.join('\n')}`,
+        )
+        throw new Error('Dimensions array order mismatch...')
       }
-    });
+    })
   }
 
   /**
@@ -161,15 +147,10 @@ export default class Dimension {
    *
    * @returns
    */
-  static stringToCoordIndices(
-    s: string | string[],
-    dimensions: Dimension[]
-  ): number[] {
+  static stringToCoordIndices(s: string | string[], dimensions: Dimension[]): number[] {
     if (dimensions.length !== s.length) {
-      throw `dimensions.length (${dimensions.length}) !== string.length (${s.length})`;
+      throw `dimensions.length (${dimensions.length}) !== string.length (${s.length})`
     }
-    return _.range(dimensions.length).map((i: number) =>
-      dimensions[i].coordNameToIndex(s[i])
-    );
+    return _.range(dimensions.length).map((i: number) => dimensions[i].coordNameToIndex(s[i]))
   }
 }

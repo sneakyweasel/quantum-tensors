@@ -1,13 +1,13 @@
-import { TAU } from "./Constants";
-import { hslToHex } from "./Helpers";
+import { TAU } from './Constants'
+import { hslToHex } from './Helpers'
 
 /**
  * COMPLEX NUMBER CLASS
  * https://en.wikipedia.org/wiki/Complex_number
  */
 export default class Complex {
-  re: number;
-  im: number;
+  re: number
+  im: number
 
   /**
    * Creates a complex number
@@ -16,8 +16,8 @@ export default class Complex {
    * @returns Creates a complex number `z = z.re + i z.im`
    */
   constructor(re: number, im = 0) {
-    this.re = re;
-    this.im = im;
+    this.re = re
+    this.im = im
   }
 
   /**
@@ -26,10 +26,10 @@ export default class Complex {
    * @returns number
    */
   get r(): number {
-    return this.magnitude;
+    return this.magnitude
   }
   get magnitude(): number {
-    return Math.sqrt(Math.pow(this.re, 2) + Math.pow(this.im, 2));
+    return Math.sqrt(Math.pow(this.re, 2) + Math.pow(this.im, 2))
   }
 
   /**
@@ -37,14 +37,14 @@ export default class Complex {
    * @returns angle
    */
   get phi(): number {
-    return this.argument;
+    return this.argument
   }
   get argument(): number {
-    let arg = Math.atan2(this.im, this.re);
+    let arg = Math.atan2(this.im, this.re)
     if (arg < 0) {
-      arg += TAU;
+      arg += TAU
     }
-    return arg;
+    return arg
   }
 
   /**
@@ -52,7 +52,7 @@ export default class Complex {
    * @returns number
    */
   get abs2(): number {
-    return Math.pow(this.re, 2) + Math.pow(this.im, 2);
+    return Math.pow(this.re, 2) + Math.pow(this.im, 2)
   }
 
   /**
@@ -60,7 +60,7 @@ export default class Complex {
    * @return z1 === 0
    */
   get isZero(): boolean {
-    return this.re === 0 && this.im === 0;
+    return this.re === 0 && this.im === 0
   }
 
   /**
@@ -68,7 +68,7 @@ export default class Complex {
    * @return z1 === 0
    */
   get isNormal(): boolean {
-    return this.r === 1;
+    return this.r === 1
   }
 
   /**
@@ -77,19 +77,21 @@ export default class Complex {
    * @returns z1 === z2
    */
   equal(z2: Complex): boolean {
-    return this.re === z2.re && this.im === z2.im;
+    return this.re === z2.re && this.im === z2.im
   }
 
+  /* eslint-disable max-len */
   /**
    * Normalize
-   * https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-vectors/a/vector-magnitude-normalization
+   * https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-vectors/a/vector-magnitude-normalization // eslint-disable-max-len
    * @returns z
    */
+  /* eslint-enable max-len */
   normalize(): Complex {
     if (this.r !== 0) {
-      return new Complex(this.re / this.r, this.im / this.r);
+      return new Complex(this.re / this.r, this.im / this.r)
     } else {
-      throw new Error("Cannot normalize a 0 length vector...");
+      throw new Error('Cannot normalize a 0 length vector...')
     }
   }
 
@@ -98,7 +100,7 @@ export default class Complex {
    * @returns z = z{-re, im}
    */
   negate(): Complex {
-    return new Complex(-this.re, this.im);
+    return new Complex(-this.re, this.im)
   }
 
   /**
@@ -106,7 +108,7 @@ export default class Complex {
    * @returns z = z{re, -im}
    */
   conj(): Complex {
-    return new Complex(this.re, -this.im);
+    return new Complex(this.re, -this.im)
   }
 
   /**
@@ -115,8 +117,8 @@ export default class Complex {
    * @returns z = z1 + z2
    */
   add(z2: Complex): Complex {
-    const z1 = this;
-    return new Complex(z1.re + z2.re, z1.im + z2.im);
+    const z1 = this
+    return new Complex(z1.re + z2.re, z1.im + z2.im)
   }
 
   /**
@@ -125,8 +127,8 @@ export default class Complex {
    * @returns z = z1 - z2
    */
   sub(z2: Complex): Complex {
-    const z1 = this;
-    return new Complex(z1.re - z2.re, z1.im - z2.im);
+    const z1 = this
+    return new Complex(z1.re - z2.re, z1.im - z2.im)
   }
 
   /**
@@ -135,11 +137,8 @@ export default class Complex {
    * @returns z = z1 * z2
    */
   mul(z2: Complex): Complex {
-    const z1 = this;
-    return new Complex(
-      z1.re * z2.re - z1.im * z2.im,
-      z1.re * z2.im + z1.im * z2.re
-    );
+    const z1 = this
+    return new Complex(z1.re * z2.re - z1.im * z2.im, z1.re * z2.im + z1.im * z2.re)
   }
 
   /**
@@ -148,16 +147,14 @@ export default class Complex {
    * @returns z = z1 / z2
    */
   div(z2: Complex): Complex {
-    const z1 = this;
-    const denom = z2.im * z2.im + z2.re * z2.re;
+    const z1 = this
+    const denom = z2.im * z2.im + z2.re * z2.re
     if (denom === 0) {
-      throw new Error(
-        `Cannot divide by 0. z1: ${this.toString()} / z2: ${z2.toString()}`
-      );
+      throw new Error(`Cannot divide by 0. z1: ${this.toString()} / z2: ${z2.toString()}`)
     }
-    const re = (z1.re * z2.re + z1.im * z2.im) / denom;
-    const im = (z2.re * z1.im - z1.re * z2.im) / denom;
-    return new Complex(re, im);
+    const re = (z1.re * z2.re + z1.im * z2.im) / denom
+    const im = (z2.re * z1.im - z1.re * z2.im) / denom
+    return new Complex(re, im)
   }
 
   /**
@@ -166,24 +163,16 @@ export default class Complex {
    * @param precision float display precision
    * @returns string with appropriate format
    */
-  toString(format: string = "cartesian", precision = 2): string {
+  toString(format = 'cartesian', precision = 2): string {
     switch (format) {
-      case "cartesian":
-        return `(${this.re.toFixed(precision)} ${
-          this.im >= 0 ? "+" : ""
-        }${this.im.toFixed(precision)}i)`;
-      case "polar":
-        return `${this.r.toFixed(precision)} exp(${this.phi.toFixed(
-          precision
-        )}i)`;
-      case "polarTau":
-        return `${this.r.toFixed(precision)} exp(${(this.phi / TAU).toFixed(
-          precision
-        )}τi)`;
+      case 'cartesian':
+        return `(${this.re.toFixed(precision)} ${this.im >= 0 ? '+' : ''}${this.im.toFixed(precision)}i)`
+      case 'polar':
+        return `${this.r.toFixed(precision)} exp(${this.phi.toFixed(precision)}i)`
+      case 'polarTau':
+        return `${this.r.toFixed(precision)} exp(${(this.phi / TAU).toFixed(precision)}τi)`
       default:
-        throw new Error(
-          `complexFormat '${format}' is not in ['cartesian', 'polar', 'polarTau'].`
-        );
+        throw new Error(`complexFormat '${format}' is not in ['cartesian', 'polar', 'polarTau'].`)
     }
   }
 
@@ -193,8 +182,8 @@ export default class Complex {
    * @returns RGB string
    */
   toColor(): string {
-    const angle = ((this.phi * 360) / TAU + 360) % 360;
-    return hslToHex(angle, 100, 100 - 50 * this.r);
+    const angle = ((this.phi * 360) / TAU + 360) % 360
+    return hslToHex(angle, 100, 100 - 50 * this.r)
   }
 
   /**
@@ -203,7 +192,7 @@ export default class Complex {
    * @param phi Angle in polar coordinates
    */
   static fromPolar(r: number, phi: number): Complex {
-    return new Complex(r * Math.cos(phi), r * Math.sin(phi));
+    return new Complex(r * Math.cos(phi), r * Math.sin(phi))
   }
 
   /**
@@ -213,7 +202,7 @@ export default class Complex {
    * @returns z = z1 + z2
    */
   static add(z1: Complex, z2: Complex): Complex {
-    return z1.add(z2);
+    return z1.add(z2)
   }
 
   /**
@@ -223,7 +212,7 @@ export default class Complex {
    * @returns z = z1 - z2
    */
   static sub(z1: Complex, z2: Complex): Complex {
-    return z1.sub(z2);
+    return z1.sub(z2)
   }
 
   /**
@@ -233,7 +222,7 @@ export default class Complex {
    * @returns z = z1 * z2
    */
   static mul(z1: Complex, z2: Complex): Complex {
-    return z1.mul(z2);
+    return z1.mul(z2)
   }
 
   /**
@@ -243,7 +232,7 @@ export default class Complex {
    * @returns z = z1 * z2
    */
   static div(z1: Complex, z2: Complex): Complex {
-    return z1.div(z2);
+    return z1.div(z2)
   }
 
   /**
@@ -253,7 +242,7 @@ export default class Complex {
    * @returns z1 === z2
    */
   static equal(z1: Complex, z2: Complex): boolean {
-    return z1.equal(z2);
+    return z1.equal(z2)
   }
 }
 
@@ -265,5 +254,5 @@ export default class Complex {
  * @returns Creates a complex number `z = z.re + i * z.im `
  */
 export function Cx(re: number, im = 0): Complex {
-  return new Complex(re, im);
+  return new Complex(re, im)
 }
