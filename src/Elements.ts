@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { mod } from './Helpers'
-import { TAU, ISQRT2 } from './Constants'
+import { TAU } from './Constants'
 import { Cx } from './Complex'
 import Dimension from './Dimension'
 import Operator from './Operator'
@@ -65,9 +65,9 @@ export function mirror(angle: number): Operator {
  */
 export function beamSplitter(angle: number): Operator {
   return Operator.outer([ops.reflectFromPlaneDirection(angle), ops.reflectPhaseFromDenser()])
-    .mulConstant(Cx(0, 1)) // TODO: check phase here
+    .scale(Cx(0, 1)) // TODO: check phase here
     .add(ops.beamsplitterTransmissionDirections(angle).outer(idPol))
-    .mulConstant(ISQRT2)
+    .scale(Cx(Math.SQRT1_2))
 }
 
 /**

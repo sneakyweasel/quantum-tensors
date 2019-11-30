@@ -185,7 +185,7 @@ export default class Operator {
    * @param c
    * @returns c M
    */
-  mulConstant(c: Complex): Operator {
+  scale(c: Complex): Operator {
     const entries = this.entries.map(entry => new OperatorEntry(entry.coordOut, entry.coordIn, entry.value.mul(c)))
     return new Operator(entries, this.dimensionsOut, this.dimensionsIn)
   }
@@ -196,7 +196,7 @@ export default class Operator {
    * @returns m1 - m2
    */
   sub(m2: Operator): Operator {
-    return this.add(m2.mulConstant(Cx(-1)))
+    return this.add(m2.scale(Cx(-1)))
   }
 
   /**

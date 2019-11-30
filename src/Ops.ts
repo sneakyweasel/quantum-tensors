@@ -12,6 +12,9 @@ const cos = (alpha: number): Complex => Cx(Math.cos(alpha), 0)
 const sin = (alpha: number): Complex => Cx(Math.sin(alpha), 0)
 const mod = (x: number, n: number): number => ((x % n) + n) % n
 
+// not as fast as this one: https://en.wikipedia.org/wiki/Fast_inverse_square_root
+export const isqrt2 = Cx(Math.SQRT1_2)
+
 /**
  * A 2d matrix, a rotation for complex numbers.
  * @param alpha An angle, in radians, i.e. from the range [0, Tau].
@@ -52,8 +55,8 @@ export function phaseShiftForRealEigenvectors(
   dimension: Dimension,
 ): Operator {
   return Operator.add([
-    projectionMatrix(alpha, dimension).mulConstant(Complex.fromPolar(1, phase * TAU)),
-    projectionMatrix(alpha + 0.25 * TAU, dimension).mulConstant(Complex.fromPolar(1, phaseOrthogonal * TAU)),
+    projectionMatrix(alpha, dimension).scale(Complex.fromPolar(1, phase * TAU)),
+    projectionMatrix(alpha + 0.25 * TAU, dimension).scale(Complex.fromPolar(1, phaseOrthogonal * TAU)),
   ])
 }
 
@@ -89,7 +92,7 @@ export function reflectPhaseFromDenser(): Operator {
  * @param rot Phase multiplier, in TAU (from range: [0,1]).
  */
 export function amplitudeIntensity(r: number, rot: number): Operator {
-  return Operator.outer([idDir, idPol]).mulConstant(Complex.fromPolar(r, TAU * rot))
+  return Operator.outer([idDir, idPol]).scale(Complex.fromPolar(r, TAU * rot))
 }
 
 /**

@@ -68,8 +68,8 @@ describe('Complex', () => {
     const complex1 = Cx(3, 4)
     const complex2 = Cx(3, 4)
     const complex3 = Cx(1, 0)
-    expect(complex1.equal(complex2)).toBe(true)
-    expect(complex1.equal(complex3)).toBe(false)
+    expect(complex1.equals(complex2)).toBe(true)
+    expect(complex1.equals(complex3)).toBe(false)
   })
 
   it('should create a complex number from polar coordinates', () => {
